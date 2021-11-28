@@ -2,11 +2,13 @@
   (:use clojure.pprint)
   (:require [clojure.test :refer :all]
             [hospital_prop_based_test.logic :refer :all]
+            [clojure.test.check.generators :as gen]
             [hospital_prop_based_test.model :as ht.model]
             [schema.core :as s]))
 
 (s/set-fn-validation! true)
 
+; São testes baseados em exemplos
 (deftest cabe-na-fila?-test
   (testing "Que cabe na fila"
     (is (cabe-na-fila? {:espera []}, :espera)))
@@ -23,3 +25,5 @@
 
   (testing "Que não cabe quando departamento não existe"
     (is (not (cabe-na-fila? {:espera [1 2 3 4]}, :raio-x)))))
+
+
