@@ -13,6 +13,10 @@
   (testing "Que cabe na fila"
     (is (cabe-na-fila? {:espera []}, :espera)))
 
+  (testing "Que cabe pessoas em filas de tamanho até 4 inclusive"
+    (doseq [fila (gen/sample (gen/vector gen/string-alphanumeric 0 4) 100)]
+      (is (cabe-na-fila? {:espera fila}, :espera))))
+
   (testing "Que não cabe na fila quando a fila está cheia"
     (is (not (cabe-na-fila? {:espera [1 2 3 4 5]}, :espera))))
 
