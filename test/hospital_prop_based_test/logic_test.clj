@@ -2,8 +2,10 @@
   (:use clojure.pprint)
   (:require [clojure.test :refer :all]
             [hospital_prop_based_test.logic :refer :all]
-            [clojure.test.check.generators :as gen]
             [hospital_prop_based_test.model :as ht.model]
+            [clojure.test.check.clojure-test :refer (defspec)]
+            [clojure.test.check.generators :as gen]
+            [clojure.test.check.properties :as prop]
             [schema.core :as s]))
 
 (s/set-fn-validation! true)
@@ -30,4 +32,18 @@
   (testing "Que não cabe quando departamento não existe"
     (is (not (cabe-na-fila? {:espera [1 2 3 4]}, :raio-x)))))
 
+; doseq está gerando uma multiplicação de casos, fila x pessoas
+;(deftest chega-em-test
+;  (testing "Que é colocada uma pessoa em filas menores que 5"
+;    (doseq [fila (gen/sample (gen/vector gen/string-alphanumeric 0 4) 10)
+;            pessoa (gen/sample gen/string-alphanumeric 5)]
+;      (println pessoa fila)
+;      (is (= 1 1))))) ;mostrar que são 50 asserts (10*5)
 
+(defspec explorando-a-api 10
+         (prop/for-all
+           [fila (gen/vector gen/string-alphanumeric 0 4)
+            pessoa gen/string-alphanumeric]
+           (println pessoa fila)
+           true
+           ))
