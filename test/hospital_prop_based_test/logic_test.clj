@@ -40,10 +40,9 @@
 ;      (println pessoa fila)
 ;      (is (= 1 1))))) ;mostrar que são 50 asserts (10*5)
 
-(defspec explorando-a-api 10
+(defspec coloca-uma-pessoa-em-filas-menores-que-5 100
          (prop/for-all
            [fila (gen/vector gen/string-alphanumeric 0 4)
             pessoa gen/string-alphanumeric]
-           (println pessoa fila)
-           true
-           ))
+           (is (= {:espera (conj fila pessoa)}
+                  (chega-em {:espera fila} :espera pessoa)))))
