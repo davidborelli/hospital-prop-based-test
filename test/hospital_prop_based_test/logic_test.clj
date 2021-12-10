@@ -81,7 +81,6 @@
 (defspec transfere-tem-que-manter-a-quantidade-de-pessoas 1
          (prop/for-all
            [
-            ;espera gen/string-alphanumeric
             espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio))
             raio-x fila-nao-cheia-gen
             ultrasom fila-nao-cheia-gen

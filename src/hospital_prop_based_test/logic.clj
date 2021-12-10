@@ -19,7 +19,7 @@
   [hospital :- ht.model/Hospital, departamento :- s/Keyword]
   (update hospital departamento pop))
 
-(s/defn proxima :- ht.model/PacienteID
+(s/defn proxima :- (s/maybe ht.model/PacienteID)
   "Retorna o próximo paciente da fila"
   [hospital :- ht.model/Hospital, departamento :- s/Keyword]
   (-> hospital
@@ -36,10 +36,11 @@
   [hospital :- ht.model/Hospital, de :- s/Keyword, para :- s/Keyword]
   {:pre  [(contains? hospital de), (contains? hospital para)]
    :post [(mesmo-tamanho? hospital % de para)]}
-  (let [pessoa (proxima hospital de)]
+  (if-let [pessoa (proxima hospital de)]
     (-> hospital
         (atende,,, de)
-        (chega-em,,, para pessoa))))
+        (chega-em,,, para pessoa))
+    hospital))
 
 (defn total-de-pacientes
   [hospital]
