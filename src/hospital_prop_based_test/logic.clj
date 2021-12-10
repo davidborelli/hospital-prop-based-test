@@ -13,7 +13,7 @@
   [hospital, departamento, pessoa]
   (if (cabe-na-fila? hospital departamento)
     (update hospital departamento conj pessoa)
-    (throw (ex-info "Não cabe ninguém neste departamento" {:paciente pessoa}))))
+    (throw (java.lang.IllegalStateException. "Não cabe ninguém neste departamento"))))
 
 (s/defn atende :- ht.model/Hospital
   [hospital :- ht.model/Hospital, departamento :- s/Keyword]

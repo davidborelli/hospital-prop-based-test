@@ -58,17 +58,31 @@
   (gen/fmap transforma-vetor-em-fila
             (gen/vector nome-aleatorio 0 4)))
 
-(defn transfere-ignorando-erro
-  [hospital para]
+(defn transfere-ignorando-erro [hospital para]
   (try
     (transfere hospital :espera para)
-    (catch clojure.lang.ExceptionInfo e
-      ;(println "falhou" e)
+    (catch IllegalStateException e
       hospital)))
 
-(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 5
+; Abordagem razoável porém  horrível, uma vez que é usado o tipo d o tipo do tipo
+; para fazer uma cond e pegar a exception que queremos
+; uma alternativa seria usar biblioteca como a carth-data
+; LOD AND RETHROW
+;(defn transfere-ignorando-erro [hospital para]
+;  (try
+;    (transfere hospital :espera para)
+;    (catch clojure.lang.ExceptionInfo e
+;      (cond
+;        (= :fila-cheia (:type (ex-data e))) hospital
+;        :else (throw e))
+;      ;hospital)))
+
+;(gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio 0 50))
+(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 1
          (prop/for-all
-           [espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio 0 50))
+           [
+            ;espera gen/string-alphanumeric
+            espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio))
             raio-x fila-nao-cheia-gen
             ultrasom fila-nao-cheia-gen
             vai-para (gen/vector (gen/elements [:raio-x :ultrasom]) 0 50)
